@@ -37,7 +37,7 @@ button{font:inherit;color:inherit}
 /* ---------- film ---------- */
 #story{position:relative;height:1750vh}
 @media (pointer:coarse){#story{height:2700vh}}
-#frame{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(120% 90% at 50% 100%,#3b2114 0%,#120c0a 45%,#04050a 100%)}
+#frame{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;background:radial-gradient(120% 90% at 50% 100%,#3b2114 0%,#120c0a 45%,#04050a 100%)}
 #stage,#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #frame::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(115% 95% at 50% 46%,rgba(0,0,0,0) 52%,rgba(0,0,0,.5) 100%),linear-gradient(180deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,0) 16%,rgba(0,0,0,0) 56%,rgba(6,4,3,.74) 100%)}
 #grain{position:absolute;inset:-60px;z-index:3;pointer-events:none;opacity:.11;mix-blend-mode:overlay;animation:grain .7s steps(5) infinite}
@@ -1112,7 +1112,10 @@ window.__gfMain = function () {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function resize() { W = stage.clientWidth; H = stage.clientHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); }
   function readScroll() { const r = story.getBoundingClientRect(), span = story.offsetHeight - window.innerHeight; target = clamp(-r.top / span, 0, 1); inView = r.bottom > -40 && r.top < window.innerHeight; }
-  window.addEventListener('resize', function () { resize(); readScroll(); }); window.addEventListener('scroll', readScroll, { passive: true });
+  window.addEventListener('resize', function () { resize(); readScroll(); });
+  // phone browsers grow and shrink the viewport as their toolbars hide: follow the frame itself, not just window resizes
+  if (window.ResizeObserver) new ResizeObserver(function () { if (stage.clientWidth !== W || stage.clientHeight !== H) { resize(); readScroll(); if (inView) frame(P, 0); } }).observe(stage);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', function () { resize(); readScroll(); }); window.addEventListener('scroll', readScroll, { passive: true });
   function frame(p, dt) {
     let i = 0; while (i < K.length - 2 && p > K[i + 1].p) i++; const a = K[i], b = K[i + 1], f = clamp((p - a.p) / (b.p - a.p), 0, 1), fs = f * f * (3 - 2 * f), u = (i + f) / (K.length - 1);
     posCurve.getPoint(u, camPos); lookCurve.getPoint(u, camLook);
