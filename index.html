@@ -35,8 +35,8 @@ a{color:var(--gold)}
 button{font:inherit;color:inherit}
 
 /* ---------- film ---------- */
-#story{position:relative;height:1750vh}
-@media (pointer:coarse){#story{height:2700vh}}
+#story{position:relative;height:1900vh}
+@media (pointer:coarse){#story{height:2900vh}}
 #frame{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;background:radial-gradient(120% 90% at 50% 100%,#3b2114 0%,#120c0a 45%,#04050a 100%)}
 #stage,#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #frame::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(115% 95% at 50% 46%,rgba(0,0,0,0) 52%,rgba(0,0,0,.5) 100%),linear-gradient(180deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,0) 16%,rgba(0,0,0,0) 56%,rgba(6,4,3,.74) 100%)}
@@ -239,12 +239,22 @@ footer .wrap{display:grid;gap:14px}
       <h2>The second fire</h2>
       <p>It took the Goldfield News building and the Montezuma Club, much of what the first one had missed.</p>
     </section>
-    <section class="cap" data-in="0.832" data-out="0.91">
+    <section class="cap" data-in="0.832" data-out="0.886">
       <p class="eyebrow">Today · population about 225</p>
       <h2>What the boom left behind</h2>
       <p>The hotel, the courthouse, the high school and the firehouse still stand. Between them: art cars, a house built of bottles, wild burros, and a truck that should have stopped.</p>
     </section>
-    <section class="cap end" data-in="0.957" data-out="2">
+    <section class="cap" data-in="0.908" data-out="0.931">
+      <p class="eyebrow">After dark · Crook Avenue &amp; Columbia Street</p>
+      <h2>The most haunted hotel in Nevada</h2>
+      <p>The Goldfield Hotel has been closed since 1945 and has never been empty. The best-known story belongs to Room 109 and a woman called Elizabeth. Ghost hunters have been filming here since 2004.</p>
+    </section>
+    <section class="cap" data-in="0.94" data-out="0.955">
+      <p class="eyebrow">North of town</p>
+      <h2>The ones who stayed</h2>
+      <p>Across the street, the 1907 high school runs ghost hunts that pay for its own repairs. Past the last houses, the pioneer cemetery keeps its hand-lettered markers. Bring a flashlight. Leave everything as you found it.</p>
+    </section>
+    <section class="cap end" data-in="0.977" data-out="2">
       <p class="eyebrow">Gemfield · four miles out · a dollar a pound</p>
       <h2>Get lost in the middle of nowhere.</h2>
       <p>Dig your own chalcedony until the light goes. Then look up.</p>
@@ -383,11 +393,12 @@ footer .wrap{display:grid;gap:14px}
 
   var MARKS=[
     ['1905','Santa Fe Saloon','925 N 5th Ave, north end','Goldfield’s oldest business in continuous operation. Original bar, wood stove, motel rooms out back.',0.35],
-    ['1908','Goldfield Hotel','Crook Ave & Columbia St','Four storeys and about 150 rooms of Rocklin granite and red brick. Exterior only; admire it from the street.',0.655],
+    ['1908','Goldfield Hotel','Crook Ave & Columbia St','Four storeys and about 150 rooms of Rocklin granite and red brick, closed since 1945 and famous for its ghosts. See it from the street unless you have booked a tour.',0.918],
     ['1907','Esmeralda County Courthouse','Crook Ave & Euclid Ave','Built the year the county seat arrived from Hawthorne, and still the working courthouse.',0.84],
     ['1907','Goldfield High School','321 Euclid Ave','Twelve rooms for a city of 20,000. Now under long-term preservation.',null],
     ['1900s','Historic Fire Station','Crook Ave, east of the hotel','Boom-era stone firehouse that outlasted both fires it was built to fight.',null],
-    ['1905','The Bottle House','West of Main St','Walls of bottles set in adobe, from the years when lumber cost more than empties.',0.895],
+    ['1905','The Bottle House','West of Main St','Walls of bottles set in adobe, from the years when lumber cost more than empties.',0.886],
+    ['1900s','Pioneer Cemetery','North of town','Boom-era graves under hand-lettered markers. Go at dusk.',0.948],
     ['1906','Gans–Nelson fight site','Empty lot off US-95','Joe Gans beat Battling Nelson on a foul in round 42, before about 8,000 people. Promoted by Tex Rickard.',0.63],
     ['1900s','Tex Rickard House','410 Crook Ave','Home of the saloon man who went on to build Madison Square Garden.',null],
     ['1900s','Florence Mine','North-east of town','The tallest wooden headframe in Nevada, with its hoist house. Tours by appointment.',0.52],
@@ -417,6 +428,8 @@ footer .wrap{display:grid;gap:14px}
     ['Tours & info','Goldfield Historical Society','325 Crook Ave','Keepers of the 190-stop walking-tour booklet and most of what is known about the town.',''],
     ['Tours & info','Florence Mine Tours','By appointment · (702) 622-1344','About $20 a person. No walk-ins.',''],
     ['Tours & info','KGFN 89.1 FM','209 E Crook Ave','Volunteer community radio, on air since 2011. Tune in as you roll into town.',''],
+    ['Tours & info','Goldfield Hotel ghost tours','Crook Ave & Columbia St','Guided tours and paranormal investigations have been offered by appointment; sources disagree on whether they are running. Ask the Historical Society before you plan around it.','Call ahead'],
+    ['Tours & info','Goldfield High School ghost hunts','321 Euclid Ave','After-dark tours of the 1907 school. Part of the proceeds goes to its restoration.','Call ahead'],
     ['Art & outdoors','International Car Forest of the Last Church','1111 E Crystal Ave, off US-95','Free, always open, donation box. The dirt road is rough on low cars.',''],
     ['Art & outdoors','Rocket Bob’s Art Cars','Main St','Outdoor yard of rolling sculpture, viewable any time. Donations welcome.',''],
     ['Art & outdoors','Gemfield Gem Claims','Gemfield Rd, ~4 mi NW · (775) 485-3789','Dig your own chalcedony. $1 a pound, cash, honor system, sunrise to sunset.','']
@@ -1088,6 +1101,32 @@ window.__gfMain = function () {
   // the car forest and all vehicles are present-day only: they share one group switch
   [carBody.mesh, carCab.mesh, carWheel.mesh].forEach(function (m) { modernG.add(m); });
 
+
+  /* ---------- after dark: the hotel's lit windows, its ghosts, and the pioneer cemetery ---------- */
+  const hauntG = new T.Group(); scene.add(hauntG); const ghosts = [], wisps = [];
+  const ghostMat = new T.MeshBasicMaterial({ color: 0xbfe8e0, transparent: true, opacity: 0.3, blending: T.AdditiveBlending, depthWrite: false, fog: false }), hauntWin = new T.MeshBasicMaterial({ color: 0xc9d77a, transparent: true, opacity: 0.9, fog: false });
+  function ghost(x, y, z, ry, s) { const g = new T.Group(); g.position.set(x, y, z); g.rotation.y = ry; g.scale.setScalar(s || 1); const dress = new T.Mesh(new T.CylinderGeometry(0.16, 0.48, 1.25, 10, 1, true), ghostMat); dress.position.y = 0.62; g.add(dress); const torso = new T.Mesh(G.sph, ghostMat); torso.scale.set(0.19, 0.3, 0.14); torso.position.y = 1.4; g.add(torso); const head = new T.Mesh(G.sph, ghostMat); head.scale.set(0.11, 0.13, 0.11); head.position.y = 1.82; g.add(head); const hair = new T.Mesh(G.sph, ghostMat); hair.scale.set(0.13, 0.2, 0.1); hair.position.set(0, 1.72, -0.06); g.add(hair); [-1, 1].forEach(function (k) { const a = new T.Mesh(G.cyl, ghostMat); a.scale.set(0.04, 0.55, 0.04); a.position.set(k * 0.23, 1.25, 0.05); a.rotation.z = k * 0.2; g.add(a); }); hauntG.add(g); ghosts.push({ g: g, y: y, ph: R() * 9 }); return g; }
+  (function () {
+    const hy = groundY(36, 36) - 1;
+    // a few windows of the Goldfield Hotel that should not be lit
+    [[12.86, 2.7, 15.2], [12.86, 11.4, 21.6], [12.86, 7.4, 55], [12.86, 2.7, 51.8], [39, 11.4, 9.86, 1]].forEach(function (w) { const m = new T.Mesh(G.box, hauntWin); if (w[3]) m.scale.set(1.2, 1.9, 0.05); else m.scale.set(0.05, 1.9, 1.2); m.position.set(w[0], hy + w[1], w[2]); hauntG.add(m); });
+    ghost(23.4, hy + 0.2, 36.5, -1.6, 1.05); ghost(12.3, hy + 10.5, 21.6, -1.57, 0.9); ghost(20, hy + 0.2, 22, -1.2, 0.95);
+    const spm = new T.SpriteMaterial({ map: softDot(), color: 0x9fb6b8, opacity: 0.06, depthWrite: false, transparent: true });
+    function wisp(x, z) { const sp2 = new T.Sprite(spm); sp2.scale.set(rr(10, 20), rr(3, 6), 1); sp2.position.set(x, groundY(x, z) + rr(0.6, 2.2), z); hauntG.add(sp2); wisps.push({ s: sp2, x: x, ph: R() * 9 }); }
+    for (let i = 0; i < 16; i++) wisp(rr(-30, 30), rr(10, 60));
+    // pioneer cemetery, north of town
+    const cx = -420, cz = -905, stones = new Inst(G.box, std({ color: 0xffffff, roughness: 1 }), 90), wood = new Inst(G.box, M.timber, 220);
+    for (let r = 0; r < 7; r++) for (let c = 0; c < 6; c++) { if (R() < 0.18) continue; const x = cx - 9 + c * 3.4 + rr(-0.5, 0.5), z = cz - 11 + r * 3.4 + rr(-0.5, 0.5), y = groundY(x, z), v = rr(0.42, 0.7);
+      if (R() < 0.62) { const h = rr(0.55, 1.0); stones.add(mat4(x, y + h / 2 - 0.05, z, rr(-0.12, 0.12), rr(-0.2, 0.2), rr(-0.1, 0.1), rr(0.42, 0.6), h, 0.12), v, v, v * 0.97); stones.add(mat4(x, y + 0.04, z + 0.9, 0, 0, 0, 0.7, 0.07, 1.7), v * 0.6, v * 0.55, v * 0.5); }
+      else { const tz = rr(-0.15, 0.15); wood.add(mat4(x, y + 0.6, z, 0, 0, tz, 0.09, 1.25, 0.06)); wood.add(mat4(x, y + 0.85, z, 0, 0, tz, 0.62, 0.09, 0.06)); } }
+    for (let i = 0; i <= 8; i++) { [[cx - 12 + i * 3, cz - 14], [cx - 12 + i * 3, cz + 13]].forEach(function (q) { wood.add(mat4(q[0], groundY(q[0], q[1]) + 0.45, q[1], 0, 0, rr(-0.08, 0.08), 0.08, 0.95, 0.08)); }); } for (let i = 0; i <= 9; i++) { [[cx - 12, cz - 14 + i * 3], [cx + 12, cz - 14 + i * 3]].forEach(function (q) { wood.add(mat4(q[0], groundY(q[0], q[1]) + 0.45, q[1], 0, 0, rr(-0.08, 0.08), 0.08, 0.95, 0.08)); }); }
+    [[cz - 14, 24.2, 0], [cz + 13, 24.2, 0]].forEach(function (q) { wood.add(mat4(cx, groundY(cx, q[0]) + 0.7, q[0], 0, 0, 0, q[1], 0.05, 0.05)); }); [[cx - 12], [cx + 12]].forEach(function (q) { wood.add(mat4(q[0], groundY(q[0], cz) + 0.7, cz - 0.5, 0, 0, 0, 0.05, 0.05, 27)); });
+    stones.done(); wood.done();
+    const gate = new T.Group(); gate.position.set(cx + 12, groundY(cx + 12, cz + 20), cz + 20); gate.rotation.y = 0.9; scene.add(gate); bx(gate, 0.16, 3.2, 0.16, M.timber, -1.7, 1.6, 0); bx(gate, 0.16, 3.2, 0.16, M.timber, 1.7, 1.6, 0); const cs = bx(gate, 3.7, 0.8, 0.07, std({ map: signTex([{ t: 'GOLDFIELD CEMETERY', s: 0.5, y: 0.52 }], '#3a2a1e', '#d9cdb0', 512, 110) }), 0, 2.95, 0); cs.castShadow = false;
+    limb(cx - 14, groundY(cx - 14, cz + 6) - 0.2, cz + 6, 0.05, 1, 0.02, 2.4, 0.2, 2); jtB.mesh.instanceMatrix.needsUpdate = true; jtT.mesh.instanceMatrix.needsUpdate = true; jtT.mesh.instanceColor.needsUpdate = true; jtB.mesh.instanceColor.needsUpdate = true;
+    ghost(cx - 2, groundY(cx - 2, cz - 3) + 0.15, cz - 3, 0.6, 1); ghost(cx + 6, groundY(cx + 6, cz + 4) + 0.15, cz + 4, 2.2, 0.85);
+    for (let i = 0; i < 12; i++) wisp(cx + rr(-16, 16), cz + rr(-16, 16));
+  })();
   /* ---------- ruin: flood, two fires, decline ---------- */
   let lastRuin = -1; const burning = [];
   function applyRuin(r) {
@@ -1154,6 +1193,7 @@ window.__gfMain = function () {
     fire: { el: 14, az: 285, sun: C(0xff7030), si: 1.0, hs: C(0x5a3424), hg: C(0x321a10), hi: 0.6, zen: C(0x140c0a), hor: C(0x9a3c16), stars: 0, fog: C(0x52240f), fd: 0.0008, ex: 1.1, win: 0.2, cloud: 0.75, dust: 0.5 },
     noon: { el: 48, az: 215, sun: C(0xffecd2), si: 2.6, hs: C(0x86a8dc), hg: C(0x6a5744), hi: 0.45, zen: C(0x1c58b8), hor: C(0xbccbd8), stars: 0, fog: C(0xb9ae9c), fd: 0.00006, ex: 0.8, win: 0, cloud: 0.12, dust: 0.3 },
     golden: { el: 8, az: 284, sun: C(0xffa552), si: 2.4, hs: C(0x6f76a0), hg: C(0x4e3324), hi: 0.5, zen: C(0x284688), hor: C(0xf7a45c), stars: 0, fog: C(0xc98a5e), fd: 0.00013, ex: 0.92, win: 0.3, cloud: 0.16, dust: 0.9 },
+    haunt: { el: 34, az: 245, sun: C(0x6c86b4), si: 0.6, hs: C(0x2a3a48), hg: C(0x0e0d0c), hi: 0.5, zen: C(0x02050b), hor: C(0x14232b), stars: 0.6, fog: C(0x0f181c), fd: 0.0012, ex: 1.2, win: 0, cloud: 0.55, dust: 0.3 },
     dusk: { el: -4, az: 290, sun: C(0xff7a45), si: 0.9, hs: C(0x4a5078), hg: C(0x2a1c18), hi: 0.6, zen: C(0x070d26), hor: C(0xd96a3a), stars: 0.75, fog: C(0x6a3c34), fd: 0.0002, ex: 1.15, win: 1, cloud: 0.1, dust: 0.5 }
   };
 
@@ -1186,17 +1226,22 @@ window.__gfMain = function () {
     { p: 0.768, pos: [-30, 26, 232], look: [-230, 8, -40], tod: 'fire', year: 1923, ruin: 0.57, fire: 1 },
     { p: 0.798, pos: [205, 36, 30], look: [60, 6, -150], tod: 'fire', year: 1924, ruin: 0.76, fire: 1 },
     { p: 0.838, pos: [370, 72, 290], look: [20, 8, 10], tod: 'noon', year: 2026, ruin: 1 },
-    { p: 0.868, pos: [-192, 2.5, 6.5], look: [40, 11, 30], tod: 'noon', fov: 58 },
-    { p: 0.89, pos: [-279, 2.2, 176], look: [-291, 1.9, 188], tod: 'noon', fov: 52 },
-    { p: 0.906, pos: [-276, 2.5, 172], look: [-291, 2.2, 188], tod: 'noon', fov: 50 },
-    { p: 0.93, pos: [-1400, 260, -1500], look: [GF.x, 20, GF.z], tod: 'golden' },
-    { p: 0.958, pos: [GF.x + 300, 46, GF.z + 200], look: [GF.x, 4, GF.z], tod: 'golden' },
-    { p: 0.983, pos: [GF.x + 9, 1.9, GF.z + 9], look: [GF.x - 40, 6, GF.z - 22], tod: 'golden', fov: 56 },
+    { p: 0.862, pos: [-192, 2.5, 6.5], look: [40, 11, 30], tod: 'noon', fov: 58 },
+    { p: 0.88, pos: [-279, 2.2, 176], look: [-291, 1.9, 188], tod: 'noon', fov: 52 },
+    { p: 0.892, pos: [-276, 2.5, 172], look: [-291, 2.2, 188], tod: 'noon', fov: 50 },
+    { p: 0.91, pos: [-24, 1.8, 46], look: [30, 9, 34], tod: 'haunt', haunt: 1, fov: 58 },
+    { p: 0.927, pos: [5, 2.0, 29], look: [23, 3.4, 35], tod: 'haunt', haunt: 1, fov: 56 },
+    { p: 0.935, pos: [-190, 46, -420], look: [-420, 2, -900], tod: 'haunt', haunt: 1 },
+    { p: 0.943, pos: [-400, 1.7, -876], look: [-421, 1.4, -903], tod: 'haunt', haunt: 1, fov: 58 },
+    { p: 0.952, pos: [-403, 1.9, -880], look: [-420, 1.3, -906], tod: 'haunt', haunt: 1, fov: 56 },
+    { p: 0.962, pos: [-1400, 260, -1500], look: [GF.x, 20, GF.z], tod: 'dawn' },
+    { p: 0.975, pos: [GF.x + 300, 46, GF.z + 200], look: [GF.x, 4, GF.z], tod: 'golden' },
+    { p: 0.988, pos: [GF.x + 9, 1.9, GF.z + 9], look: [GF.x - 40, 6, GF.z - 22], tod: 'golden', fov: 56 },
     { p: 1, pos: [GF.x + 7, 2.5, GF.z + 8], look: [GF.x - 40, 22, GF.z - 24], tod: 'dusk', fov: 60 }
   ];
   let carry = { year: 2026, ruin: 1, fire: 0, flood: 0, fov: 55 };
   const posPts = [], lookPts = [];
-  K.forEach(function (k) { ['year', 'ruin'].forEach(function (f) { if (k[f] === undefined) k[f] = carry[f]; else carry[f] = k[f]; }); k.fire = k.fire || 0; k.flood = k.flood || 0; k.fov = k.fov || 55;
+  K.forEach(function (k) { ['year', 'ruin'].forEach(function (f) { if (k[f] === undefined) k[f] = carry[f]; else carry[f] = k[f]; }); k.fire = k.fire || 0; k.flood = k.flood || 0; k.haunt = k.haunt || 0; k.fov = k.fov || 55;
     posPts.push(new T.Vector3(k.pos[0], k.abs ? k.pos[1] : groundY(k.pos[0], k.pos[2]) + k.pos[1], k.pos[2])); lookPts.push(new T.Vector3(k.look[0], k.labs ? k.look[1] : groundY(k.look[0], k.look[2]) + k.look[1], k.look[2])); });
   const posCurve = new T.CatmullRomCurve3(posPts, false, 'centripetal'), lookCurve = new T.CatmullRomCurve3(lookPts, false, 'centripetal');
 
@@ -1230,7 +1275,7 @@ window.__gfMain = function () {
     posCurve.getPoint(u, camPos); lookCurve.getPoint(u, camLook);
     const gy = groundY(camPos.x, camPos.z); if (camPos.y < gy + 1.5) camPos.y = gy + 1.5;
     const A = TOD[a.tod], B = TOD[b.tod]; ['el', 'az', 'si', 'hi', 'stars', 'fd', 'ex', 'win', 'cloud', 'dust'].forEach(function (k) { cur[k] = lerp(A[k], B[k], fs); }); ['sun', 'hs', 'hg', 'zen', 'hor', 'fog'].forEach(function (k) { cur[k].copy(A[k]).lerp(B[k], fs); });
-    const year = lerp(a.year, b.year, sm(0.15, 0.85, f)), ruin = lerp(a.ruin, b.ruin, f), fire = lerp(a.fire, b.fire, fs), flood = lerp(a.flood, b.flood, fs);
+    const year = lerp(a.year, b.year, sm(0.15, 0.85, f)), ruin = lerp(a.ruin, b.ruin, f), fire = lerp(a.fire, b.fire, fs), flood = lerp(a.flood, b.flood, fs), haunt = lerp(a.haunt, b.haunt, fs);
     camera.fov = lerp(a.fov, b.fov, fs) * (W < H ? 1.25 : 1); const agl = camPos.y - gy; camera.near = clamp(agl * 0.08, 0.2, 4); camera.far = 70000; camera.updateProjectionMatrix();
     camera.position.copy(camPos); camera.lookAt(camLook);
     // sky + light
@@ -1258,6 +1303,7 @@ window.__gfMain = function () {
     if (sparkle) { sparkle.material.uniforms.uTime.value = time; sparkle.material.uniforms.uScale.value = ps; }
     const near = Math.hypot(camPos.x - SF.x, camPos.z - SF.z) < 140; lampLights.forEach(function (l) { l.l.intensity = near ? l.i * (0.92 + Math.sin(time * 9 + l.i) * 0.05) * clamp(cur.win, 0.25, 1.2) : 0; });
     if (fanRef) fanRef.rotation.y = time * 1.6;
+    hauntG.visible = haunt > 0.02; if (hauntG.visible) { ghostMat.opacity = haunt * (0.2 + 0.1 * Math.sin(time * 1.3)); hauntWin.opacity = haunt * (0.55 + 0.3 * Math.sin(time * 7.1) * Math.sin(time * 2.3) + (Math.sin(time * 23) > 0.92 ? -0.4 : 0)); for (let n = 0; n < ghosts.length; n++) { const q = ghosts[n]; q.g.position.y = q.y + Math.sin(time * 0.8 + q.ph) * 0.12; q.g.rotation.z = Math.sin(time * 0.5 + q.ph) * 0.05; } for (let n = 0; n < wisps.length; n++) { const w = wisps[n]; w.s.position.x = w.x + Math.sin(time * 0.12 + w.ph) * 6; } }
     // living things
     for (let n = 0; n < burros.length; n++) { const q = burros[n], t = time + q.ph; q.neck.rotation.x = q.graze ? 0.75 + Math.sin(t * 0.5) * 0.35 : Math.sin(t * 0.4) * 0.12; q.head.rotation.y = Math.sin(t * 0.33) * 0.3; q.tail.rotation.z = Math.sin(t * 2.6) * 0.35 * (Math.sin(t * 0.3) > 0 ? 1 : 0.1); q.e1.rotation.x = q.e2.rotation.x = Math.max(0, Math.sin(t * 1.1)) * -0.3; }
     for (let n = 0; n < weeds.length; n++) { const w = weeds[n]; const x = camPos.x + (((w.ox + time * w.sp - camPos.x) % 110) + 110) % 110 - 55, z = camPos.z + (((w.oz - camPos.z) % 80) + 80) % 80 - 40; const show = agl < 60 && Math.hypot(x - SF.x, z - SF.z) > 14 && flood < 0.2; w.g.visible = show; if (show) { const hop = Math.pow(Math.abs(Math.sin(time * (1.3 + w.sp * 0.12) + w.ph)), 1.6) * (0.25 + 0.5 * Math.abs(Math.sin(time * 0.37 + w.ph * 2))); w.g.position.set(x, groundY(x, z) + w.s * 0.8 + hop, z + Math.sin(time * 0.5 + w.ph) * 1.5); w.g.rotation.z = -time * w.sp / w.s * 0.55; w.g.rotation.x = Math.sin(time * 0.6 + w.ph) * 0.8; w.g.rotation.y = time * 0.3 + w.ph; } }
