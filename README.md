@@ -1,7 +1,7 @@
-# Goldfield, Nevada
+# Goldfield, Nevada — Higgsfield plates branch
 
-A scroll-driven three.js film and field guide for Goldfield, Nevada: fall out of the Milky Way, through 120 years of boom and bust, and land in the middle of nowhere.
+Comparison branch. Same site as `main`, plus an optional layer of photographic plates over the 3D film, switched with the "Plates on / off" button under the wordmark.
 
-`index.html` is the whole site (scene, photos and fonts are embedded). It is served with GitHub Pages from the `main` branch.
+See `plates/README.md` for the shot list, prompts and file names. `main` is the finalized version and is what GitHub Pages serves.
 
 Built in Reno, NV by Commence Commerce.

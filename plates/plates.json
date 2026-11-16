@@ -1,0 +1,88 @@
+[
+ {
+  "id": "01-milky-way",
+  "a": 0.0,
+  "b": 0.07,
+  "file": "plates/01-milky-way.jpg",
+  "dy": -3
+ },
+ {
+  "id": "02-car-forest",
+  "a": 0.168,
+  "b": 0.236,
+  "file": "plates/02-car-forest.jpg",
+  "photo": "t_bus",
+  "dx": 2
+ },
+ {
+  "id": "03-saloon-exterior",
+  "a": 0.338,
+  "b": 0.362,
+  "file": "plates/03-saloon-exterior.jpg",
+  "dx": -1.5
+ },
+ {
+  "id": "04-saloon-interior",
+  "a": 0.4,
+  "b": 0.452,
+  "file": "plates/04-saloon-interior.jpg",
+  "photo": "t_room",
+  "dx": 2.5
+ },
+ {
+  "id": "05-boomtown-1908",
+  "a": 0.5,
+  "b": 0.566,
+  "file": "plates/05-boomtown-1908.jpg",
+  "dx": -2
+ },
+ {
+  "id": "06-main-street-1908",
+  "a": 0.61,
+  "b": 0.666,
+  "file": "plates/06-main-street-1908.jpg",
+  "dy": -2
+ },
+ {
+  "id": "07-flood-1913",
+  "a": 0.68,
+  "b": 0.716,
+  "file": "plates/07-flood-1913.jpg",
+  "dx": 2
+ },
+ {
+  "id": "08-fire-1923",
+  "a": 0.73,
+  "b": 0.776,
+  "file": "plates/08-fire-1923.jpg",
+  "dx": -2
+ },
+ {
+  "id": "09-today",
+  "a": 0.842,
+  "b": 0.884,
+  "file": "plates/09-today.jpg",
+  "dx": 2
+ },
+ {
+  "id": "10-hotel-night",
+  "a": 0.912,
+  "b": 0.93,
+  "file": "plates/10-hotel-night.jpg",
+  "dy": -2
+ },
+ {
+  "id": "11-cemetery",
+  "a": 0.943,
+  "b": 0.955,
+  "file": "plates/11-cemetery.jpg",
+  "dx": 1.5
+ },
+ {
+  "id": "12-gemfield",
+  "a": 0.982,
+  "b": 1.01,
+  "file": "plates/12-gemfield.jpg",
+  "dy": -2
+ }
+]
