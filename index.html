@@ -199,20 +199,20 @@ footer .wrap{display:grid;gap:14px}
       <h2>The International Car Forest of the Last Church</h2>
       <p>More than forty cars, trucks and buses stand nose-down in the desert. Mark Rippie buried the first one in 2002. It is free, it never closes, and the sky out here is this dark.</p>
     </section>
-    <section class="cap" data-in="0.244" data-out="0.3081">
-      <p class="eyebrow">Rolling the years back</p>
-      <h2>Every empty lot was a building once.</h2>
-      <p>Watch the town come back up out of the ground.</p>
-    </section>
-    <section class="cap" data-in="0.3215" data-out="0.3388">
+    <section class="cap" data-in="0.284" data-out="0.303">
       <p class="eyebrow">December 1902 · under Columbia Mountain</p>
       <h2>First, there was the ore</h2>
       <p>Harry Stimler and William Marsh staked the first claims on a grubstake from Tonopah. Within three years the Mohawk, the Florence and the Combination were hoisting some of the richest gold ore Nevada had ever seen.</p>
     </section>
-    <section class="cap" data-in="0.3416" data-out="0.3598">
+    <section class="cap" data-in="0.306" data-out="0.326">
       <p class="eyebrow">1903 to 1906 · the mines build a city</p>
       <h2>Every headframe paid for a street</h2>
       <p>Miners needed beds, assayers, banks and whiskey. Three railroads came for the ore, and a stock exchange sold the dream by the share. In 1906 George Wingfield and George Nixon rolled the best ground into Goldfield Consolidated.</p>
+    </section>
+    <section class="cap" data-in="0.329" data-out="0.352">
+      <p class="eyebrow">1904 to 1908 · and then the town</p>
+      <h2>Every empty lot was a building once.</h2>
+      <p>Watch the town come up out of the ground.</p>
     </section>
     <section class="cap" data-in="0.3665" data-out="0.4124">
       <p class="eyebrow">1905 · 925 North Fifth Avenue</p>
@@ -411,7 +411,7 @@ footer .wrap{display:grid;gap:14px}
     ['1900s','Pioneer Cemetery','North of town','Boom-era graves under hand-lettered markers. Go at dusk.',0.9502],
     ['1906','Gans–Nelson fight site','Empty lot off US-95','Joe Gans beat Battling Nelson on a foul in round 42, before about 8,000 people. Promoted by Tex Rickard.',0.6459],
     ['1900s','Tex Rickard House','410 Crook Ave','Home of the saloon man who went on to build Madison Square Garden.',null],
-    ['1900s','Florence Mine','North-east of town','The tallest wooden headframe in Nevada, with its hoist house. Tours by appointment.',0.3301],
+    ['1900s','Florence Mine','North-east of town','The tallest wooden headframe in Nevada, with its hoist house. Tours by appointment.',0.292],
     ['1908','Consolidated Mill ruins','Slope of Columbia Mountain','Foundations of the hundred-stamp mill that ran from December 1908 to January 1919.',0.5646],
     ['1905','Bullfrog-Goldfield rail yard','Edge of town','One of three railroads that once served the camp.',null],
     ['—','Columbia Mountain','Two miles north','The rust-red backdrop in every boom-era panorama, about 6,040 ft at the summit.',0.5742],
@@ -682,7 +682,7 @@ window.__gfMain = function () {
 
   /* ---------- places ---------- */
   const CF = { x: 590, z: 746 }, SF = { x: 300, z: -800 }, GF = { x: -5238, z: -3480 }, PANO = { x: -700, z: 830 };
-  const modernG = new T.Group(), pastG = new T.Group(); scene.add(modernG); scene.add(pastG);
+  const modernG = new T.Group(), pastG = new T.Group(), mineG = new T.Group(), streetG = new T.Group(); scene.add(modernG); scene.add(pastG); scene.add(mineG); scene.add(streetG);
 
   /* ---------- ribbons (roads, tracks, water) ---------- */
   function ribbon(pts, width, yoff, vScale, step, flat) {
@@ -695,10 +695,10 @@ window.__gfMain = function () {
   const stTex = groundTex(); stTex.repeat.set(3, 1.5);
   const streetMat = std({ color: 0xa8946f, map: stTex, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const SXs = [], SZs = []; for (let i = -8; i <= 6; i++) SXs.push(i * 110); for (let j = -9; j <= 9; j++) SZs.push(j * 75);
-  function street(x0, z0, x1, z1) { const L = Math.hypot(x1 - x0, z1 - z0), n = Math.round(L / 30); let run = null; for (let i = 0; i <= n; i++) { const x = lerp(x0, x1, i / n), z = lerp(z0, z1, i / n), ok = groundY(x, z) < 42; if (ok) { if (!run) run = [[x, z]]; run[1] = [x, z]; } if ((!ok || i === n) && run) { if (run[1] && Math.hypot(run[1][0] - run[0][0], run[1][1] - run[0][1]) > 60) addRibbon(scene, run, 18, 0.25, streetMat); run = null; } } }
+  function street(x0, z0, x1, z1) { const L = Math.hypot(x1 - x0, z1 - z0), n = Math.round(L / 30); let run = null; for (let i = 0; i <= n; i++) { const x = lerp(x0, x1, i / n), z = lerp(z0, z1, i / n), ok = groundY(x, z) < 42; if (ok) { if (!run) run = [[x, z]]; run[1] = [x, z]; } if ((!ok || i === n) && run) { if (run[1] && Math.hypot(run[1][0] - run[0][0], run[1][1] - run[0][1]) > 60) addRibbon(streetG, run, 18, 0.25, streetMat); run = null; } } }
   SXs.forEach(function (x) { street(x, -640, x, 640); });
   SZs.forEach(function (z) { street(-860, z, 640, z); });
-  addRibbon(scene, [[110, -675], [SF.x - 20, SF.z + 30], [SF.x + 60, SF.z + 22]], 9, 0.25, streetMat);
+  addRibbon(streetG, [[110, -675], [SF.x - 20, SF.z + 30], [SF.x + 60, SF.z + 22]], 9, 0.25, streetMat);
   addRibbon(scene, [[330, 600], [470, 700], [CF.x - 40, CF.z - 20]], 7, 0.25, streetMat);
   const US95 = [[-900, -8700], [-560, -4200], [-330, -1700], [-220, -700], [-220, 0], [440, 0], [640, 150], [1250, 1500], [2500, 6400]];
   const rt = roadTex(); addRibbon(modernG, US95, 11, 0.4, std({ map: rt, roughness: 0.8, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }), 12);
@@ -847,12 +847,12 @@ window.__gfMain = function () {
     else if (cls === 'tent') { kind = 'decline'; thr = rr(0.03, 0.4); }
     else if (forceKind === 'survive' || ((cls === 'house' || cls === 'wood1') && R() < 0.1)) { kind = 'survive'; thr = 9; }
     else { kind = 'decline'; thr = rr(0.78, 0.95); }
-    recs.push({ inst: c.inst, i: i, ri: ri, rc: rc, x: x, y: y, z: z, ry: ry, sx: sx, sy: sy, sz: sz, w: c.w * sx, h: c.h * sy, d: c.d * sz, gh: c.gable || 0, gw: c.w * sx * 1.08, gd: c.d * sz * 1.06, kind: kind, thr: thr, col: col, tilt: rr(-0.5, 0.5) });
+    recs.push({ inst: c.inst, i: i, ri: ri, rc: rc, x: x, y: y, z: z, ry: ry, sx: sx, sy: sy, sz: sz, w: c.w * sx, h: c.h * sy, d: c.d * sz, gh: c.gable || 0, gw: c.w * sx * 1.08, gd: c.d * sz * 1.06, kind: kind, thr: thr, col: col, tilt: rr(-0.5, 0.5), gt: cls === 'tent' ? rr(0, 0.35) : (cls === 'house' || cls === 'wood1') ? rr(0.12, 0.7) : rr(0.35, 0.88) });
   }
 
   /* ---------- hero buildings ---------- */
   const heroes = [];
-  function hero(g, kind, thr, x, z, w, h, d) { heroes.push({ obj: g, kind: kind, thr: thr, x: x, y: g.position.y, z: z, w: w, h: h, d: d }); }
+  function hero(g, kind, thr, x, z, w, h, d) { heroes.push({ obj: g, kind: kind, thr: thr, x: x, y: g.position.y, z: z, w: w, h: h, d: d, gt: h > 15.5 && w > 40 ? 0.86 : w === 6 ? (heroes.filter(function (q) { return q.w === 6; }).length < 4 ? -1 : rr(0.05, 0.4)) : w === 60 ? 0.8 : rr(0.5, 0.75) }); }
   function cornice(g, w, d, y, x, z) { const m = bx(g, w + 0.8, 0.5, d + 0.8, M.cream, x, y, z); m.castShadow = false; }
   (function hotel() { // Goldfield Hotel, 1908: granite ground floor, red brick above, U-plan facing Columbia St
     const g = new T.Group(), y0 = groundY(36, 36) - 1; g.position.set(0, y0, 0); scene.add(g); reserve(12, 10, 62, 62);
@@ -888,9 +888,9 @@ window.__gfMain = function () {
   [[-30, -5, 1.5], [-8, 5.5, -1.6], [-116, 150, 0.1], [-104, -50, 3.2], [-60, 5, 1.6], [-180, -6, 1.5], [-117, 250, 0.05], [8, 80, 3.1], [-240, 6, 1.7]].forEach(function (w) { wagon(pastG, w[0], w[1], w[2]); });
   for (let i = 0; i < 26; i++) { const x = pick([-99.5, -120.5]) + rr(-0.6, 0.6), z = rr(-200, 320), y = groundY(x, z); if (R() < 0.5) barrel(pastG, x, y, z); else bx(pastG, 0.8, 0.7, 0.8, M.plank, x, y + 0.35, z, 0, R(), 0); }
 
-  [[640, -380, 26, 0.3], [520, -560, 20, 1], [760, -640, 22, 2], [430, -330, 18, 2.2], [700, -900, 24, 1.4]].forEach(function (h) { const lz = -h[2] * 0.98 - 3.5, sx = h[0] + Math.sin(h[3]) * lz, sz = h[1] + Math.cos(h[3]) * lz, y = groundY(sx, sz); [[4.2, 2.6, 0], [-4.2, 2.2, 1.5], [0, 2.4, 5.2]].forEach(function (o) { const l = sp(pastG, 0.16, 0.2, 0.16, M.glow, sx + o[0], y + o[1], sz + o[2]); l.castShadow = false; }); const l2 = sp(pastG, 0.2, 0.24, 0.2, M.glow, h[0], groundY(h[0], h[1]) + h[2] * 0.55, h[1]); l2.castShadow = false; });
-  oreCart(pastG, 626, -360, 0.3); oreCart(pastG, 632, -352, 0.3); oreCart(pastG, 600, -350, 1.2); for (let i = 0; i < 12; i++) { const x = 622 + rr(-7, 7), z = -366 + rr(-6, 6); sp(pastG, rr(0.4, 0.9), rr(0.25, 0.5), rr(0.4, 0.9), std({ color: 0x8a7458 }), x, groundY(x, z) + 0.05, z); }
-  burro(pastG, 612, -346, 2.4, true); burro(pastG, 615, -343.5, 2.6, true);
+  [[640, -380, 26, 0.3], [520, -560, 20, 1], [760, -640, 22, 2], [430, -330, 18, 2.2], [700, -900, 24, 1.4]].forEach(function (h) { const lz = -h[2] * 0.98 - 3.5, sx = h[0] + Math.sin(h[3]) * lz, sz = h[1] + Math.cos(h[3]) * lz, y = groundY(sx, sz); [[4.2, 2.6, 0], [-4.2, 2.2, 1.5], [0, 2.4, 5.2]].forEach(function (o) { const l = sp(mineG, 0.16, 0.2, 0.16, M.glow, sx + o[0], y + o[1], sz + o[2]); l.castShadow = false; }); const l2 = sp(mineG, 0.2, 0.24, 0.2, M.glow, h[0], groundY(h[0], h[1]) + h[2] * 0.55, h[1]); l2.castShadow = false; });
+  oreCart(mineG, 626, -360, 0.3); oreCart(mineG, 632, -352, 0.3); oreCart(mineG, 600, -350, 1.2); for (let i = 0; i < 12; i++) { const x = 622 + rr(-7, 7), z = -366 + rr(-6, 6); sp(mineG, rr(0.4, 0.9), rr(0.25, 0.5), rr(0.4, 0.9), std({ color: 0x8a7458 }), x, groundY(x, z) + 0.05, z); }
+  burro(mineG, 612, -346, 2.4, true); burro(mineG, 615, -343.5, 2.6, true);
   // generate the grid town
   (function town() {
     for (let i = -8; i < 6; i++) for (let j = -9; j < 9; j++) {
@@ -1171,19 +1171,21 @@ window.__gfMain = function () {
   })();
   /* ---------- ruin: flood, two fires, decline ---------- */
   let lastRuin = -1; const burning = [];
-  function applyRuin(r) {
-    if (Math.abs(r - lastRuin) < 0.0004) return false; lastRuin = r; burning.length = 0; const gone = sm(0.84, 0.97, r);
+  let lastGrow = -1;
+  function applyRuin(r, gr) {
+    if (Math.abs(r - lastRuin) < 0.0004 && Math.abs(gr - lastGrow) < 0.0004) return false; lastRuin = r; lastGrow = gr; burning.length = 0; const gone = sm(0.84, 0.97, r);
     for (let n = 0; n < recs.length; n++) { const b = recs[n]; let sy = 1, dy = 0, tilt = 0, k = 0, char = 0;
       if (b.kind === 'flood') { k = sm(b.thr, b.thr + 0.03, r); sy = 1 - k; dy = -1.5 * k; tilt = b.tilt * k; }
       else if (b.kind === 'fire1' || b.kind === 'fire2') { k = sm(b.thr, b.thr + 0.04, r); sy = (1 - 0.93 * k) * (1 - gone); char = k; if (k > 0.02 && r < b.thr + 0.075) burning.push(b); }
       else if (b.kind === 'decline') { k = sm(b.thr, b.thr + 0.04, r); sy = 1 - k; }
+      if (gr < 1) sy *= sm(b.gt, b.gt + 0.1, gr);
       const s = sy < 0.004 ? 0 : 1;
       b.inst.mesh.setMatrixAt(b.i, mat4(b.x, b.y + dy, b.z, tilt * 0.4, b.ry, tilt, b.sx * s, Math.max(b.sy * sy, 0.0001) * s, b.sz * s));
       if (b.kind === 'fire1' || b.kind === 'fire2') b.inst.mesh.setColorAt(b.i, _c.setRGB(lerp(b.col[0], 0.05, char), lerp(b.col[1], 0.04, char), lerp(b.col[2], 0.035, char)));
       if (b.ri >= 0) { const rs = sy < 0.5 ? 0 : 1; roofInst.mesh.setMatrixAt(b.ri, mat4(b.x, b.y + dy + b.h * sy, b.z, tilt * 0.4, b.ry, tilt, b.gw * rs, b.gh * rs, b.gd * rs)); }
     }
     Object.keys(classes).forEach(function (k) { const m = classes[k].inst.mesh; m.instanceMatrix.needsUpdate = true; if (m.instanceColor) m.instanceColor.needsUpdate = true; }); roofInst.mesh.instanceMatrix.needsUpdate = true;
-    for (let n = 0; n < heroes.length; n++) { const h = heroes[n]; if (h.kind === 'survive') continue; const k = sm(h.thr, h.thr + 0.05, r); const fire = h.kind !== 'decline'; const sy = fire ? (1 - 0.95 * k) * (1 - gone) : 1 - k; h.obj.visible = sy > 0.01; h.obj.scale.y = Math.max(sy, 0.01); if (fire && k > 0.02 && r < h.thr + 0.09) burning.push(h); }
+    for (let n = 0; n < heroes.length; n++) { const h = heroes[n]; const up = gr < 1 && h.gt >= 0 ? sm(h.gt, h.gt + 0.1, gr) : 1; if (h.kind === 'survive') { h.obj.visible = up > 0.01; h.obj.scale.y = Math.max(up, 0.01); continue; } const k = sm(h.thr, h.thr + 0.05, r); const fire = h.kind !== 'decline'; const sy = (fire ? (1 - 0.95 * k) * (1 - gone) : 1 - k) * up; h.obj.visible = sy > 0.01; h.obj.scale.y = Math.max(sy, 0.01); if (fire && k > 0.02 && r < h.thr + 0.09) burning.push(h); }
     return true;
   }
 
@@ -1249,19 +1251,23 @@ window.__gfMain = function () {
     { p: 0.1531, pos: [CF.x - 25, 16, CF.z - 235], look: [CF.x, 14, CF.z], tod: 'night' },
     { p: 0.1818, pos: [CF.x - 14, 2.3, CF.z - 44], look: [CF.x + 4, 9, CF.z + 40], tod: 'night', fov: 58 },
     { p: 0.2105, pos: [CF.x + 12, 2.0, CF.z + 2], look: [CF.x - 12, 8, CF.z + 60], tod: 'night', fov: 58 },
-    { p: 0.2392, pos: [CF.x - 110, 34, CF.z - 220], look: [SF.x, 5, SF.z], tod: 'night', year: 2026, ruin: 1 },
-    { p: 0.2842, pos: [245, 42, -150], look: [SF.x, 4, SF.z], tod: 'night', year: 1950, ruin: 0.3 },
-    { p: 0.3263, pos: [588, 4.5, -338], look: [640, 15, -382], tod: 'night', year: 1902, ruin: 0.1, fov: 56 },
-    { p: 0.3368, pos: [580, 7, -372], look: [660, 14, -430], tod: 'predawn', year: 1903, ruin: 0.04, fov: 54 },
-    { p: 0.3502, pos: [548, 20, -486], look: [720, 14, -680], tod: 'predawn', year: 1904, ruin: 0, fov: 50 },
-    { p: 0.3636, pos: [SF.x + 5, 2.5, SF.z + 44], look: [SF.x, 3.6, SF.z + 8], tod: 'predawn', year: 1905, ruin: 0 },
+    { p: 0.2392, pos: [CF.x - 60, 36, CF.z - 230], look: [640, 12, -380], tod: 'night', year: 2026, ruin: 1, grow: 1 },
+    { p: 0.257, pos: [575, 58, 180], look: [640, 12, -380], tod: 'night', year: 1960, ruin: 1, grow: 0.3 },
+    { p: 0.271, pos: [590, 32, -150], look: [640, 13, -382], tod: 'night', year: 1910, ruin: 1, grow: 0 },
+    { p: 0.2745, pos: [591, 25, -205], look: [640, 14, -382], tod: 'night', year: 1904, ruin: 0, grow: 0 },
+    { p: 0.288, pos: [588, 4.5, -338], look: [640, 15, -382], tod: 'night', year: 1902, ruin: 0, grow: 0, fov: 56 },
+    { p: 0.301, pos: [580, 7, -372], look: [660, 14, -430], tod: 'predawn', year: 1903, grow: 0.06, fov: 54 },
+    { p: 0.314, pos: [548, 20, -486], look: [720, 14, -680], tod: 'predawn', year: 1904, grow: 0.2, fov: 50 },
+    { p: 0.333, pos: [455, 62, -400], look: [-80, 4, -30], tod: 'predawn', year: 1904, grow: 0.55, fov: 52 },
+    { p: 0.35, pos: [345, 26, -640], look: [SF.x, 4, SF.z], tod: 'predawn', year: 1905, grow: 0.82 },
+    { p: 0.3636, pos: [SF.x + 5, 2.5, SF.z + 44], look: [SF.x, 3.6, SF.z + 8], tod: 'predawn', year: 1905, ruin: 0, grow: 0.86 },
     { p: 0.3923, pos: [SF.x + 0.2, 1.95, SF.z + 12.5], look: [SF.x - 0.6, 1.9, SF.z - 4], tod: 'predawn', year: 1905, fov: 60 },
     { p: 0.4211, pos: [SF.x + 0.9, 1.95, SF.z + 3.2], look: [SF.x - 3.4, 1.5, SF.z - 4.5], tod: 'predawn', fov: 62 },
     { p: 0.445, pos: [SF.x - 0.5, 1.95, SF.z - 3.9], look: [SF.x + 3.8, 1.5, SF.z - 1.6], tod: 'predawn', fov: 64 },
     { p: 0.4612, pos: [SF.x - 0.7, 1.95, SF.z - 1.2], look: [SF.x + 3.2, 1.9, SF.z + 4.5], tod: 'predawn', fov: 64 },
     { p: 0.4756, pos: [SF.x + 0.3, 1.95, SF.z + 3.2], look: [SF.x - 1.2, 2.1, SF.z + 12], tod: 'dawn', year: 1905, fov: 62 },
-    { p: 0.4928, pos: [SF.x, 2.6, SF.z + 17], look: [-200, 30, 100], tod: 'dawn', year: 1906 },
-    { p: 0.5311, pos: [-470, 40, 500], look: [150, 40, -1300], tod: 'dawn', year: 1908, fov: 50 },
+    { p: 0.4928, pos: [SF.x, 2.6, SF.z + 17], look: [-200, 30, 100], tod: 'dawn', year: 1906, grow: 0.92 },
+    { p: 0.5311, pos: [-470, 40, 500], look: [150, 40, -1300], tod: 'dawn', year: 1908, grow: 1, fov: 50 },
     { p: 0.5742, pos: [-350, 30, 340], look: [330, 60, -1700], tod: 'morning', year: 1908, fov: 48 },
     { p: 0.6124, pos: [-128, 15, 390], look: [-108, 6, -150], tod: 'morning', year: 1908 },
     { p: 0.644, pos: [-112, 2.6, 96], look: [-60, 8, 0], tod: 'morning', year: 1908, fov: 58 },
@@ -1287,9 +1293,9 @@ window.__gfMain = function () {
     { p: 0.9885, pos: [GF.x + 9, 1.9, GF.z + 9], look: [GF.x - 40, 6, GF.z - 22], tod: 'golden', fov: 56 },
     { p: 1.0, pos: [GF.x + 7, 2.5, GF.z + 8], look: [GF.x - 40, 22, GF.z - 24], tod: 'dusk', fov: 60 }
   ];
-  let carry = { year: 2026, ruin: 1, fire: 0, flood: 0, fov: 55 };
+  let carry = { year: 2026, ruin: 1, grow: 1, fire: 0, flood: 0, fov: 55 };
   const posPts = [], lookPts = [];
-  K.forEach(function (k) { ['year', 'ruin'].forEach(function (f) { if (k[f] === undefined) k[f] = carry[f]; else carry[f] = k[f]; }); k.fire = k.fire || 0; k.flood = k.flood || 0; k.haunt = k.haunt || 0; k.fov = k.fov || 55;
+  K.forEach(function (k) { ['year', 'ruin', 'grow'].forEach(function (f) { if (k[f] === undefined) k[f] = carry[f]; else carry[f] = k[f]; }); k.fire = k.fire || 0; k.flood = k.flood || 0; k.haunt = k.haunt || 0; k.fov = k.fov || 55;
     posPts.push(new T.Vector3(k.pos[0], k.abs ? k.pos[1] : groundY(k.pos[0], k.pos[2]) + k.pos[1], k.pos[2])); lookPts.push(new T.Vector3(k.look[0], k.labs ? k.look[1] : groundY(k.look[0], k.look[2]) + k.look[1], k.look[2])); });
   const posCurve = new T.CatmullRomCurve3(posPts, false, 'centripetal'), lookCurve = new T.CatmullRomCurve3(lookPts, false, 'centripetal');
 
@@ -1323,7 +1329,7 @@ window.__gfMain = function () {
     posCurve.getPoint(u, camPos); lookCurve.getPoint(u, camLook);
     const gy = groundY(camPos.x, camPos.z); if (camPos.y < gy + 1.5) camPos.y = gy + 1.5;
     const A = TOD[a.tod], B = TOD[b.tod]; ['el', 'az', 'si', 'hi', 'stars', 'fd', 'ex', 'win', 'cloud', 'dust'].forEach(function (k) { cur[k] = lerp(A[k], B[k], fs); }); ['sun', 'hs', 'hg', 'zen', 'hor', 'fog'].forEach(function (k) { cur[k].copy(A[k]).lerp(B[k], fs); });
-    const year = lerp(a.year, b.year, sm(0.15, 0.85, f)), ruin = lerp(a.ruin, b.ruin, f), fire = lerp(a.fire, b.fire, fs), flood = lerp(a.flood, b.flood, fs), haunt = lerp(a.haunt, b.haunt, fs);
+    const year = lerp(a.year, b.year, sm(0.15, 0.85, f)), ruin = lerp(a.ruin, b.ruin, f), grow = lerp(a.grow, b.grow, f), fire = lerp(a.fire, b.fire, fs), flood = lerp(a.flood, b.flood, fs), haunt = lerp(a.haunt, b.haunt, fs);
     camera.fov = lerp(a.fov, b.fov, fs) * (W < H ? 1.25 : 1); const agl = camPos.y - gy; camera.near = clamp(agl * 0.08, 0.2, 4); camera.far = 70000; camera.updateProjectionMatrix();
     camera.position.copy(camPos); camera.lookAt(camLook);
     // sky + light
@@ -1338,11 +1344,11 @@ window.__gfMain = function () {
     ridgeMats.forEach(function (m) { m.color.copy(cur.hor).multiplyScalar(m.userData.k).lerp(cur.fog, 0.35); m.opacity = 1 - sm(250, 1800, agl); m.visible = m.opacity > 0.01; });
     for (let n = 0; n < winMats.length; n++) winMats[n].emissiveIntensity = cur.win * (1 - sm(0.5, 0.95, ruin) * 0.9);
     // eras
-    const changed = applyRuin(ruin); const modern = ruin > 0.9; modernG.visible = modern; pastG.visible = ruin < 0.6;
+    const changed = applyRuin(ruin, grow); const modern = ruin > 0.9 && grow > 0.6; modernG.visible = modern; pastG.visible = ruin < 0.6 && grow > 0.45; mineG.visible = ruin < 0.6; streetG.visible = grow > 0.12;
     const sig = burning.length + ':' + (burning[0] ? burning[0].x : 0); if (changed && sig !== emitSig) { emitSig = sig; fillEmitters(); }
     const ps = H * renderer.getPixelRatio() * 0.5 / Math.tan(camera.fov * Math.PI / 360);
     const fa = fire * (burning.length ? 1 : 0); flames.visible = smoke.visible = fa > 0.01; flames.material.uniforms.uAmt.value = fa; smoke.material.uniforms.uAmt.value = fa; [flames, smoke, stacks].forEach(function (s) { s.material.uniforms.uTime.value = time; s.material.uniforms.uScale.value = ps; });
-    smoke.material.uniforms.uCol.value.setRGB(0.1, 0.08, 0.07); stacks.visible = ruin < 0.5 && cur.stars < 0.9; stacks.material.uniforms.uAmt.value = 0.8; stacks.material.uniforms.uCol.value.copy(cur.hs).multiplyScalar(0.55);
+    smoke.material.uniforms.uCol.value.setRGB(0.1, 0.08, 0.07); stacks.visible = ruin < 0.5 && cur.stars < 0.9 && grow > 0.85; stacks.material.uniforms.uAmt.value = 0.8; stacks.material.uniforms.uCol.value.copy(cur.hs).multiplyScalar(0.55);
     if (fa > 0.01 && burning.length) { const b0 = burning[(burning.length / 2) | 0]; fireLight.position.set(b0.x, b0.y + 25, b0.z); fireLight.intensity = fa * (5 + Math.sin(time * 17) * 1.2 + Math.sin(time * 7.3) * 1.5); } else fireLight.intensity = 0;
     rain.visible = flood > 0.02; rain.material.uniforms.uAmt.value = flood; rain.material.uniforms.uTime.value = time; rain.material.uniforms.uCam.value.copy(camPos);
     water.visible = flood > 0.02; water.position.y = -1.2 + flood * 2.9; water.material.opacity = 0.93 * sm(0.02, 0.3, flood); waterBump.offset.y = -time * 0.35; waterBump.offset.x = Math.sin(time * 0.4) * 0.05;
