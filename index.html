@@ -36,6 +36,7 @@ button{font:inherit;color:inherit}
 
 /* ---------- film ---------- */
 #story{position:relative;height:1750vh}
+@media (pointer:coarse){#story{height:2700vh}}
 #frame{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(120% 90% at 50% 100%,#3b2114 0%,#120c0a 45%,#04050a 100%)}
 #stage,#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #frame::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(115% 95% at 50% 46%,rgba(0,0,0,0) 52%,rgba(0,0,0,.5) 100%),linear-gradient(180deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,0) 16%,rgba(0,0,0,0) 56%,rgba(6,4,3,.74) 100%)}
@@ -340,7 +341,7 @@ footer .wrap{display:grid;gap:14px}
 /* ---------- field guide data ---------- */
 (function(){
   var STORY=document.getElementById('story');
-  function jump(p){var span=STORY.offsetHeight-window.innerHeight;window.scrollTo({top:STORY.offsetTop+span*p,behavior:'auto'});}
+  function jump(p){window.__gfSnap=true;var span=STORY.offsetHeight-window.innerHeight;window.scrollTo({top:STORY.offsetTop+span*p,behavior:'auto'});}
   window.__jump=jump;
 
   var PLANS=[
@@ -616,24 +617,24 @@ window.__gfMain = function () {
   [[21000, 250, 1100, 0.62, 3], [33000, 500, 2100, 0.8, 7]].forEach(function (c) {
     const seg = 240, p = [], idx = []; for (let i = 0; i <= seg; i++) { const a = i / seg * Math.PI * 2, h = c[1] + (c[2] - c[1]) * Math.pow(fbm(Math.cos(a) * 3 + c[4], Math.sin(a) * 3 + c[4]), 1.6) * 1.6; p.push(Math.cos(a) * c[0], -120, Math.sin(a) * c[0], Math.cos(a) * c[0], h, Math.sin(a) * c[0]); if (i < seg) { const k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); } }
     const g = new T.BufferGeometry(); g.setAttribute('position', new T.Float32BufferAttribute(p, 3)); g.setIndex(idx);
-    const mt = new T.MeshBasicMaterial({ fog: false, side: T.DoubleSide }); mt.userData.k = c[3]; ridgeMats.push(mt); const m = new T.Mesh(g, mt); m.frustumCulled = false; scene.add(m);
+    const mt = new T.MeshBasicMaterial({ fog: false, side: T.DoubleSide, transparent: true }); mt.userData.k = c[3]; ridgeMats.push(mt); const m = new T.Mesh(g, mt); m.frustumCulled = false; scene.add(m);
   });
 
   /* ---------- sky ---------- */
   function dirAE(azDeg, elDeg) { const a = azDeg * Math.PI / 180, e = elDeg * Math.PI / 180; return new T.Vector3(Math.sin(a) * Math.cos(e), Math.sin(e), -Math.cos(a) * Math.cos(e)); }
   const CORE = dirAE(192, 27), GALP = new T.Vector3().crossVectors(CORE, dirAE(70, 62)).normalize();
-  const skyU = { uZen: { value: new T.Color() }, uHor: { value: new T.Color() }, uSun: { value: new T.Vector3(0, 1, 0) }, uSunCol: { value: new T.Color() }, uGal: { value: GALP }, uCore: { value: CORE }, uStars: { value: 1 }, uTime: { value: 0 }, uFlash: { value: 0 }, uCloud: { value: 0 } };
+  const skyU = { uZen: { value: new T.Color() }, uHor: { value: new T.Color() }, uSun: { value: new T.Vector3(0, 1, 0) }, uSunCol: { value: new T.Color() }, uGal: { value: GALP }, uCore: { value: CORE }, uStars: { value: 1 }, uTime: { value: 0 }, uFlash: { value: 0 }, uCloud: { value: 0 }, uHigh: { value: 0 }, uFog: { value: new T.Color() } };
   const sky = new T.Mesh(new T.SphereGeometry(1, 48, 24), new T.ShaderMaterial({
     uniforms: skyU, side: T.BackSide, depthTest: false, depthWrite: false, fog: false,
     vertexShader: 'varying vec3 vDir;void main(){vDir=position;vec4 p=projectionMatrix*vec4(mat3(viewMatrix)*position,1.0);gl_Position=p.xyww;}',
     fragmentShader: [
-      'uniform vec3 uZen,uHor,uSun,uSunCol,uGal,uCore;uniform float uStars,uTime,uFlash,uCloud;varying vec3 vDir;',
+      'uniform vec3 uZen,uHor,uSun,uSunCol,uGal,uCore;uniform float uStars,uTime,uFlash,uCloud,uHigh;uniform vec3 uFog;varying vec3 vDir;',
       'float hash(vec3 p){p=fract(p*0.3183099+.1);p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}',
       'float noise(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}',
       'float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*noise(p);p*=2.03;a*=.5;}return s;}',
-      'float stars(vec3 d,float sc,float th){vec3 p=d*sc;vec3 i=floor(p);vec3 f=fract(p);float h=hash(i);if(h<th)return 0.;vec3 c=vec3(hash(i+7.1),hash(i+3.3),hash(i+9.7))*.6+.2;float b=(h-th)/(1.-th);return smoothstep(.13,.0,length(f-c))*(.3+b*b*3.);}',
+      'float stars(vec3 d,float sc,float th){vec3 p=d*sc;vec3 i=floor(p);vec3 f=fract(p);float h=hash(i);if(h<th)return 0.;vec3 c=vec3(hash(i+7.1),hash(i+3.3),hash(i+9.7))*.6+.2;float b=(h-th)/(1.-th);return (1.-smoothstep(.0,.13,length(f-c)))*(.3+b*b*3.);}',
       'void main(){vec3 d=normalize(vDir);float h=max(d.y,0.);',
-      ' vec3 col=mix(uHor,uZen,pow(h,.42));col=mix(col,uHor*.55,smoothstep(0.,-.25,d.y));',
+      ' vec3 col=mix(uHor,uZen,pow(h,.42));col=mix(col,uHor*.55,1.-smoothstep(-.25,0.,d.y));',
       ' float sd=max(dot(d,uSun),0.);float sv=smoothstep(-.12,.03,uSun.y);',
       ' col+=uSunCol*(pow(sd,6.)*.1+pow(sd,60.)*.4)*sv*(1.-uCloud*.8)+uSunCol*smoothstep(.99955,.9998,sd)*8.*smoothstep(-.02,.02,uSun.y)*(1.-uCloud);',
       ' if(uCloud>.01){float cn=fbm(vec3(d.xz/(abs(d.y)+.22)*1.3,uTime*.012));col=mix(col,uHor*(.5+.7*cn),uCloud*smoothstep(.0,.2,d.y)*smoothstep(.75-uCloud*.7,1.05-uCloud*.6,cn+.25));}',
@@ -645,7 +646,9 @@ window.__gfMain = function () {
       '  float tw=.72+.28*sin(uTime*2.3+hash(floor(d*95.))*40.);',
       '  col+=(mwc+vec3(.9,.95,1.)*st*tw)*uStars*smoothstep(-.03,.12,d.y);}',
       ' col+=uFlash;gl_FragColor=vec4(col,1.);',
-      ' #include <tonemapping_fragment>', ' #include <encodings_fragment>', '}'].join('\n')
+      ' #include <tonemapping_fragment>', ' #include <encodings_fragment>',
+      ' // haze is mixed in display space, exactly as the ground fog is, so sky and ground meet without a seam',
+      ' float hz=max(1.-smoothstep(-.05,.012,d.y),uHigh*(1.-smoothstep(-.02,.34,d.y)));gl_FragColor.rgb=mix(gl_FragColor.rgb,uFog,hz);', '}'].join('\n')
   }));
   sky.frustumCulled = false; sky.renderOrder = -10; scene.add(sky);
 
@@ -667,7 +670,7 @@ window.__gfMain = function () {
   }
   function addRibbon(par, pts, width, yoff, mat, vScale, step, flat) { const m = new T.Mesh(ribbon(pts, width, yoff, vScale, step, flat), mat); m.receiveShadow = true; par.add(m); return m; }
   const stTex = groundTex(); stTex.repeat.set(3, 1.5);
-  const streetMat = std({ color: 0xc4ad88, map: stTex, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const streetMat = std({ color: 0xa8946f, map: stTex, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const SXs = [], SZs = []; for (let i = -8; i <= 6; i++) SXs.push(i * 110); for (let j = -9; j <= 9; j++) SZs.push(j * 75);
   function street(x0, z0, x1, z1) { const L = Math.hypot(x1 - x0, z1 - z0), n = Math.round(L / 30); let run = null; for (let i = 0; i <= n; i++) { const x = lerp(x0, x1, i / n), z = lerp(z0, z1, i / n), ok = groundY(x, z) < 42; if (ok) { if (!run) run = [[x, z]]; run[1] = [x, z]; } if ((!ok || i === n) && run) { if (run[1] && Math.hypot(run[1][0] - run[0][0], run[1][1] - run[0][1]) > 60) addRibbon(scene, run, 18, 0.25, streetMat); run = null; } } }
   SXs.forEach(function (x) { street(x, -640, x, 640); });
@@ -1017,7 +1020,7 @@ window.__gfMain = function () {
   const water = addRibbon(scene, [[-430, 700], [-300, 350], [-190, 60], [-175, -300], [-120, -700], [-80, -1100]], 210, 0, std({ color: 0x5f5142, emissive: 0x1c1915, roughness: 0.22, metalness: 0.15, transparent: true, opacity: 0.93, bumpMap: waterBump, bumpScale: 0.6 }), 10, 14, true); water.visible = false; water.receiveShadow = false;
   // dust motes, wrapped around the camera
   const dust = (function () { const n = Math.round(1500 * Q), p = new Float32Array(n * 3), s = new Float32Array(n); for (let i = 0; i < n; i++) { p[i * 3] = rr(0, 70); p[i * 3 + 1] = rr(0, 26); p[i * 3 + 2] = rr(0, 70); s[i] = R(); } const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(p, 3)); g.setAttribute('aS', new T.BufferAttribute(s, 1));
-    const m = new T.ShaderMaterial({ uniforms: { uTime: { value: 0 }, uCam: { value: new T.Vector3() }, uCol: { value: new T.Color() }, uAmt: { value: 0.3 }, uScale: { value: 500 }, uMap: { value: dot } }, transparent: true, depthWrite: false, blending: T.AdditiveBlending, vertexShader: 'attribute float aS;uniform float uTime,uScale;uniform vec3 uCam;varying float vA;void main(){vec3 p=position+vec3(uTime*(.7+aS),sin(uTime*.3+aS*30.)*.6,uTime*.25*aS);p.x=mod(p.x-uCam.x,70.)-35.;p.z=mod(p.z-uCam.z,70.)-35.;p.y=mod(p.y-uCam.y,26.)-9.;p+=uCam;vec4 mv=modelViewMatrix*vec4(p,1.);float d=-mv.z;vA=smoothstep(1.,6.,d)*smoothstep(35.,18.,d)*(.4+.6*aS);gl_PointSize=uScale*(.05+aS*.16)/d;gl_Position=projectionMatrix*mv;}', fragmentShader: 'uniform sampler2D uMap;uniform vec3 uCol;uniform float uAmt;varying float vA;void main(){gl_FragColor=vec4(uCol*vA*uAmt,1.)*texture2D(uMap,gl_PointCoord).a;}' }); const pt = new T.Points(g, m); pt.frustumCulled = false; scene.add(pt); return pt; })();
+    const m = new T.ShaderMaterial({ uniforms: { uTime: { value: 0 }, uCam: { value: new T.Vector3() }, uCol: { value: new T.Color() }, uAmt: { value: 0.3 }, uScale: { value: 500 }, uMap: { value: dot } }, transparent: true, depthWrite: false, blending: T.AdditiveBlending, vertexShader: 'attribute float aS;uniform float uTime,uScale;uniform vec3 uCam;varying float vA;void main(){vec3 p=position+vec3(uTime*(.7+aS),sin(uTime*.3+aS*30.)*.6,uTime*.25*aS);p.x=mod(p.x-uCam.x,70.)-35.;p.z=mod(p.z-uCam.z,70.)-35.;p.y=mod(p.y-uCam.y,26.)-9.;p+=uCam;vec4 mv=modelViewMatrix*vec4(p,1.);float d=-mv.z;vA=smoothstep(1.,6.,d)*(1.-smoothstep(18.,35.,d))*(.4+.6*aS);gl_PointSize=uScale*(.05+aS*.16)/d;gl_Position=projectionMatrix*mv;}', fragmentShader: 'uniform sampler2D uMap;uniform vec3 uCol;uniform float uAmt;varying float vA;void main(){gl_FragColor=vec4(uCol*vA*uAmt,1.)*texture2D(uMap,gl_PointCoord).a;}' }); const pt = new T.Points(g, m); pt.frustumCulled = false; scene.add(pt); return pt; })();
   // star field you fall through on the way down
   const KP0 = new T.Vector3(CF.x + 100, 15000, CF.z - 9500);
   const fall = (function () { const n = Math.round(2600 * Q), p = new Float32Array(n * 3), s = new Float32Array(n); const A = KP0, B = new T.Vector3(CF.x + 20, 500, CF.z - 1500); for (let i = 0; i < n; i++) { const t = Math.pow(R(), 0.8), a = R() * 6.283, r = 60 + Math.pow(R(), 1.6) * 2600 * (0.4 + t); p[i * 3] = lerp(B.x, A.x, t) + Math.cos(a) * r; p[i * 3 + 1] = lerp(B.y, A.y, t) + rr(-400, 400) + 700; p[i * 3 + 2] = lerp(B.z, A.z, t) + Math.sin(a) * r; s[i] = R(); } const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(p, 3)); g.setAttribute('aS', new T.BufferAttribute(s, 1));
@@ -1105,6 +1108,7 @@ window.__gfMain = function () {
   const cur = { el: 0, az: 0, sun: C(0), si: 0, hs: C(0), hg: C(0), hi: 0, zen: C(0), hor: C(0), stars: 0, fog: C(0), fd: 0, ex: 1, win: 0, cloud: 0, dust: 0 };
   const camPos = new T.Vector3(), camLook = new T.Vector3(), sunDir = new T.Vector3();
   let W = 0, H = 0, P = 0, target = 0, time = 0, lastT = performance.now(), inView = true, emitSig = '';
+  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches, maxRate = coarse ? 0.034 : 0.22;
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function resize() { W = stage.clientWidth; H = stage.clientHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); }
   function readScroll() { const r = story.getBoundingClientRect(), span = story.offsetHeight - window.innerHeight; target = clamp(-r.top / span, 0, 1); inView = r.bottom > -40 && r.top < window.innerHeight; }
@@ -1118,15 +1122,15 @@ window.__gfMain = function () {
     camera.fov = lerp(a.fov, b.fov, fs) * (W < H ? 1.25 : 1); const agl = camPos.y - gy; camera.near = clamp(agl * 0.08, 0.2, 4); camera.far = 70000; camera.updateProjectionMatrix();
     camera.position.copy(camPos); camera.lookAt(camLook);
     // sky + light
-    sunDir.copy(dirAE(cur.az, cur.el)); skyU.uSun.value.copy(sunDir); skyU.uSunCol.value.copy(cur.sun).multiplyScalar(cur.el > 20 && cur.stars > 0.5 ? 0 : 1); skyU.uZen.value.copy(cur.zen); skyU.uHor.value.copy(cur.hor); skyU.uStars.value = cur.stars; skyU.uTime.value = time; skyU.uCloud.value = cur.cloud;
+    sunDir.copy(dirAE(cur.az, cur.el)); skyU.uSun.value.copy(sunDir); skyU.uSunCol.value.copy(cur.sun).multiplyScalar(cur.el > 20 && cur.stars > 0.5 ? 0 : 1); skyU.uZen.value.copy(cur.zen); skyU.uHor.value.copy(cur.hor); skyU.uStars.value = cur.stars; skyU.uTime.value = time; skyU.uCloud.value = cur.cloud; skyU.uHigh.value = sm(500, 3200, camPos.y - gy); skyU.uFog.value.copy(cur.fog);
     let flash = 0; if (flood > 0.3) { const t = time % 5.3; flash = (t < 0.09 || (t > 0.2 && t < 0.3)) ? 0.5 * flood : 0; } skyU.uFlash.value = flash * 0.5;
     const ld = dirAE(cur.az, Math.max(cur.el, 9)); const focus = _v.copy(camLook).sub(camPos); const ext = clamp(agl * 2.2, 70, 900); const fl = Math.min(focus.length(), ext * 0.75); focus.setLength(fl).add(camPos);
     sun.target.position.copy(focus); sun.position.copy(focus).addScaledVector(ld, 900); sun.color.copy(cur.sun); sun.intensity = cur.si + flash * 3;
     const sc = sun.shadow.camera; sc.left = -ext; sc.right = ext; sc.top = ext; sc.bottom = -ext; sc.updateProjectionMatrix();
     const ins = Math.abs(camPos.x - SF.x) < 4.6 ? sm(SF.z + 10.5, SF.z + 7.6, camPos.z) : 0; sun.intensity *= lerp(1, 0.2, ins);
     hemi.color.copy(cur.hs); hemi.groundColor.copy(cur.hg); hemi.intensity = (cur.hi + flash * 2) * lerp(1, 0.2, ins);
-    scene.fog.color.copy(cur.fog); scene.fog.density = cur.fd * (agl > 2500 ? 0.25 : 1); renderer.toneMappingExposure = cur.ex * lerp(1, 0.9, ins);
-    ridgeMats.forEach(function (m) { m.color.copy(cur.hor).multiplyScalar(m.userData.k).lerp(cur.fog, 0.35); });
+    scene.fog.color.copy(cur.fog); const high = sm(500, 3200, agl); scene.fog.density = cur.fd * (1 + high * 7); renderer.toneMappingExposure = cur.ex * lerp(1, 0.9, ins);
+    ridgeMats.forEach(function (m) { m.color.copy(cur.hor).multiplyScalar(m.userData.k).lerp(cur.fog, 0.35); m.opacity = 1 - sm(250, 1800, agl); m.visible = m.opacity > 0.01; });
     for (let n = 0; n < winMats.length; n++) winMats[n].emissiveIntensity = cur.win * (1 - sm(0.5, 0.95, ruin) * 0.9);
     // eras
     const changed = applyRuin(ruin); const modern = ruin > 0.9; modernG.visible = modern; pastG.visible = ruin < 0.6;
@@ -1151,7 +1155,7 @@ window.__gfMain = function () {
   }
   function loop(now) {
     const dt = Math.min(0.1, (now - lastT) / 1000); lastT = now; requestAnimationFrame(loop);
-    if (!inView) return; time += dt; P = reduce ? target : P + (target - P) * (1 - Math.exp(-dt * 5)); if (Math.abs(target - P) < 0.00002) P = target;
+    if (!inView) return; time += dt; if (window.__gfSnap || reduce) { P = target; window.__gfSnap = false; } else { const want = (target - P) * (1 - Math.exp(-dt * (coarse ? 3.2 : 5))), lim = maxRate * dt; P += clamp(want, -lim, lim); } if (Math.abs(target - P) < 0.00002) P = target;
     frame(P, dt);
   }
   function start() { resize(); readScroll(); P = target; frame(P, 0); document.body.classList.add('ready'); lastT = performance.now(); requestAnimationFrame(loop); }
